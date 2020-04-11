@@ -46,7 +46,7 @@ export default {
     ItemEditor: () => import("../components/Edit/ItemEditor")
   },
   computed: {
-    ...mapGetters(["active_todo"])
+    ...mapGetters(['all_todos', "active_todo"])
   },
   created() {
     this.setActive(+this.id);
@@ -58,11 +58,11 @@ export default {
         const current_id = Math.max(
           ...this.active_todo.items.map(item => item.id)
         );
-        this.active_todo.items.push({
+        this.active_todo.items = [...this.active_todo.items, {
           id: current_id > 0 ? current_id + 1 : 1,
           checked: false,
           description: this.new_description
-        });
+        }];
         this.$set(this, "new_description", "");
       }
     },
@@ -81,7 +81,9 @@ export default {
       if(this.active_todo.todo) {
         this.removeTodo(this.active_todo.id);
       }
+      console.log(this.active_todo);
       this.clearActive();
+      console.log(this.all_todos);
       this.goToMain();
     }
   }
