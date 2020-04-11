@@ -54,9 +54,9 @@ export default {
       command: null,
       modal_is_opened: false,
 
-      history: [], // [{mutation, payload}] for done operations [ undo ]
-      revision: 0,
-      is_moving: false,
+      history: [], // saving states
+      revision: 0, // current position
+      is_moving: false, // undo/redo status - true = one of them was called, false = native update
     };
   },
   components: {
