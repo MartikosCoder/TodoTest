@@ -10,21 +10,22 @@
       >{{ item.description }}</li>
     </ul>
     <button class="todo-list__item__edit-btn" @click="editTodo">Edit</button>
-    <button class="todo-list__item__remove-btn" @click="removeTodo(todo.id)">Remove</button>
+    <button class="todo-list__item__remove-btn" @click="confirmRemove(todo.id)">Remove</button>
   </li>
 </template>
 
 <script>
-import { mapActions } from "vuex";
 export default {
   name: "TodoCard",
   props: {
     todo: Object
   },
   methods: {
-    ...mapActions(["removeTodo"]),
     editTodo() {
       this.$router.push(`/edit/${this.todo.id}`);
+    },
+    confirmRemove() {
+        this.$emit('modalRequired', this.todo.id);
     }
   }
 };
