@@ -34,7 +34,7 @@
     <div class="edit-page__controls">
       <button>Back</button>
       <button>Remove</button>
-      <button>Save</button>
+      <button @click="updateTodo">Save</button>
     </div>
   </section>
 </template>
@@ -62,14 +62,19 @@ export default {
     this.setActive(+this.id);
   },
   methods: {
-    ...mapActions(["setActive"]),
+    ...mapActions(["setActive", 'changeTodo']),
     addNewItem() {
+      const current_id = Math.max(...this.active_todo.items.map(item => item.id));
       this.active_todo.items.push({
-        id: Math.max(...this.active_todo.items.map(item => item.id)) + 1,
+        id: current_id > 0 ? current_id + 1 : 1,
         checked: false,
         description: this.new_description
       });
       this.$set(this, "new_description", "");
+    },
+    updateTodo() {
+      this.changeTodo();
+      this.$router.push('/');
     }
   }
 };
