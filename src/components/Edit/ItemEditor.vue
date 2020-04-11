@@ -27,10 +27,9 @@ export default {
       this.$set(this.item, "checked", !this.item.checked);
     },
     removeItem() {
-      this.active_todo.items.splice(
-        this.active_todo.items.indexOf(this.item),
-        1
-      );
+      this.active_todo.items = [...this.active_todo.items.filter(
+        item => item.id !== this.item.id
+      )];
     }
   }
 };

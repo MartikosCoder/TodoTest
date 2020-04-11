@@ -22,10 +22,15 @@
       </section>
     </div>
     <div class="edit-page__controls">
-      <button @click="discardChanges">Back</button>
-      <button @click="prepareToRemove">Remove</button>
+      <button @click="setConfirmation('discard')">Back</button>
+      <button @click="setConfirmation('remove')">Remove</button>
       <button @click="updateTodo">Save</button>
     </div>
+    <section class="edit-page__modal" v-show="modal_is_opened">
+      <span>Are you sure?</span>
+      <button @click="discardCommand">No</button>
+      <button @click="acceptCommand">Yes</button>
+    </section>
   </section>
 </template>
 
@@ -39,7 +44,9 @@ export default {
   },
   data() {
     return {
-      new_description: ""
+      new_description: "",
+      command: null,
+      modal_is_opened: false
     };
   },
   components: {
@@ -73,17 +80,23 @@ export default {
       this.changeTodo();
       this.goToMain();
     },
-    prepareToRemove() {
-      this.removeTodo(this.active_todo.id);
-      this.goToMain();
+    setConfirmation(command) {
+      this.$set(this, 'modal_is_opened', true);
+      this.$set(this, 'command', command);
     },
-    discardChanges() {
-      if(this.active_todo.todo) {
-        this.removeTodo(this.active_todo.id);
+    discardCommand() {
+      this.$set(this, 'command', '');
+      this.$set(this, 'modal_is_opened', false);
+    },
+    acceptCommand() {
+      switch(this.command) {
+        case 'remove': 
+          this.removeTodo(this.active_todo.id);
+          break;
+        case 'discard':
+          this.clearActive();
+          break;
       }
-      console.log(this.active_todo);
-      this.clearActive();
-      console.log(this.all_todos);
       this.goToMain();
     }
   }
