@@ -70,7 +70,7 @@ export default new Vuex.Store({
     setActive({ commit, getters }, id) {
       commit("SET_ACTIVE_TODO", getters.specific_todo(id));
     },
-    goBack({ commit }) {
+    clearActive({ commit }) {
       commit("SET_ACTIVE_TODO", {});
     }
   }

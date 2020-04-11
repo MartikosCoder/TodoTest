@@ -22,7 +22,7 @@
       </section>
     </div>
     <div class="edit-page__controls">
-      <button>Back</button>
+      <button @click="discardChanges">Back</button>
       <button @click="prepareToRemove">Remove</button>
       <button @click="updateTodo">Save</button>
     </div>
@@ -52,7 +52,7 @@ export default {
     this.setActive(+this.id);
   },
   methods: {
-    ...mapActions(["setActive", "changeTodo", "removeTodo"]),
+    ...mapActions(["setActive", "changeTodo", "removeTodo", 'clearActive']),
     addNewItem() {
       if (this.new_description.length > 0) {
         const current_id = Math.max(
@@ -66,13 +66,23 @@ export default {
         this.$set(this, "new_description", "");
       }
     },
+    goToMain() {
+      this.$router.push("/");
+    },
     updateTodo() {
       this.changeTodo();
-      this.$router.push("/");
+      this.goToMain();
     },
     prepareToRemove() {
       this.removeTodo(this.active_todo.id);
-      this.$router.push("/");
+      this.goToMain();
+    },
+    discardChanges() {
+      if(this.active_todo.todo) {
+        this.removeTodo(this.active_todo.id);
+      }
+      this.clearActive();
+      this.goToMain();
     }
   }
 };
