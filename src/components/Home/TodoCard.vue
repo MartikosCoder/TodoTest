@@ -83,8 +83,6 @@ export default {
 
   .todo-list__item__btn {
     width: 50%;
-    border: none;
-    background: none;
     padding: 5px;
 
     transition: background .3s;

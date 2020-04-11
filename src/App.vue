@@ -14,6 +14,12 @@
   list-style: none;
 }
 
+button, input {
+  border: none;
+  background: none;
+  outline: none;
+}
+
 button {
   cursor: pointer;
 }

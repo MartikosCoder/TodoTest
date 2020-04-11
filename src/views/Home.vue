@@ -52,10 +52,6 @@ export default {
 </script>
 
 <style>
-  .home-page {
-    background: #dcfeff;
-  }
-
   .home-page__todo-list {
     min-height: 100vh;
 
@@ -75,16 +71,14 @@ export default {
 
     padding: 20px 5%;
 
-    background: #00ca00;
+    background: rgb(0, 202, 0);
     color: white;
-
-    border: none;
 
     text-transform: uppercase;
   }
 
   .home-page__add-btn:hover {
-    background: #009500;
+    background: rgb(0, 149, 0);
     transition: .3s;
   }
 </style>

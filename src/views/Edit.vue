@@ -2,13 +2,11 @@
   <section class="edit-page">
     <div class="edit-page__todo">
       <div class="edit-page__todo__title">
-        <label for="title">Title:</label>
         <input type="text" name="title" id="title" :value="active_todo.title" @blur="saveTitle" />
       </div>
       <section class="todo__items-block">
         <div class="edit-page__todo__new-item">
-          <label for="title">New Item:</label>
-          <input type="text" name="new_item" id="new_item" v-model="new_description" />
+          <input type="text" name="new_item" id="new_item" placeholder="New task" v-model="new_description" />
           <button @click="addNewItem">Add</button>
         </div>
         <ul class="edit-page__todo__items-list">
@@ -23,13 +21,13 @@
     </div>
     <div class="edit-page__controls">
       <div class="controls__main">
-        <button @click="setConfirmation('discard')">Back</button>
-        <button @click="setConfirmation('remove')">Remove</button>
-        <button @click="updateTodo">Save</button>
+        <button class="controls__btn" @click="setConfirmation('discard')">Back</button>
+        <button class="controls__btn remove" @click="setConfirmation('remove')">Remove</button>
+        <button class="controls__btn save" @click="updateTodo">Save</button>
       </div>
       <div class="controls__additional">
-        <button @click="undo">Undo</button>
-        <button @click="redo">Redo</button>
+        <button class="controls__btn"  @click="undo">Undo</button>
+        <button class="controls__btn"  @click="redo">Redo</button>
       </div>
     </div>
     <section class="edit-page__modal" v-show="modal_is_opened">
@@ -156,3 +154,91 @@ export default {
   }
 };
 </script>
+<style>
+  .edit-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .edit-page__todo {
+    min-width: 250px;
+    min-height: 250px;
+
+    margin: 5%;
+
+    background: #000074;
+    color: white;
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+    position: relative;
+  }
+
+  .edit-page__todo__title {
+    background: white;
+    padding: 8% 10%;
+    color: black;
+
+    text-transform: capitalize;
+  }
+
+  .edit-page__todo__title input {
+    width: 100%;
+    padding: 2%;
+    border-bottom: 1px solid black;
+    color: black;
+
+    text-transform: capitalize;
+  }
+
+  .todo__items-block {
+    padding: 5%;
+  }
+
+  .edit-page__todo__new-item {
+    display: flex;
+  }
+
+  .edit-page__controls {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .controls__main, .controls__additional {
+    width: 100%;
+    display: flex;
+
+    justify-content:center;
+
+    background: #2469ff;
+  }
+
+  .controls__btn {
+    width: 50%;
+    color: white;
+    padding: 10px;
+  }
+  .controls__btn.remove {
+    background: rgb(205, 0, 0);
+  }
+  .controls__btn.remove:hover {
+    background: rgb(166, 0, 0);
+  }
+
+  .controls__btn.save {
+    background: rgb(0, 202, 0);
+  }
+  .controls__btn.save:hover {
+    background: rgb(0, 149, 0);
+  }
+</style>
