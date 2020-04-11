@@ -71,7 +71,7 @@ export default new Vuex.Store({
       commit('SAVE_STATE');
     },
     removeTodo({commit, getters}, id) {
-      commit('REMOVE_TODO', getters.todo_list.indexOf(getters.specific_todo(getters.todo_list, id)));
+      commit('REMOVE_TODO', getters.all_todos.indexOf(getters.specific_todo(getters.all_todos, id)));
       commit('SAVE_STATE');
     },
     changeTodo({ commit }, new_todo) {
@@ -79,7 +79,7 @@ export default new Vuex.Store({
       commit('SAVE_STATE');
     },
     setActive({commit, getters}, id) {
-      commit('SET_ACTIVE_TODO', getters.specific_todo(getters.todo_list, id));
+      commit('SET_ACTIVE_TODO', getters.specific_todo(getters.all_todos, id));
     },
     goBack({commit}) {
       commit('CLEAR_ACTIVE_TODO');
