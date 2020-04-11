@@ -20,8 +20,8 @@ export default new Vuex.Store({
     active_todo(state) {
       return state.todo_active;
     },
-    specific_todo() {
-      return (parent, id) => parent.find(item => item.id === id);
+    specific_todo(state) {
+      return id => { return {...state.todo_list.find(item => item.id === id)}};
     },
     current_id(state) {
       return state.id;
@@ -38,26 +38,11 @@ export default new Vuex.Store({
     REMOVE_TODO(state, index) {
       state.todo_list.splice(index, 1);
     },
-    CHANGE_TODO(state, new_todo) {
-      state.todo_active.title = new_todo.title;
-      state.todo_active.items = [...new_todo.items];
+    CHANGE_TODO(state, {index, new_todo}) {
+      state.todo_list.splice(index, 1, new_todo);
     },
     SET_ACTIVE_TODO(state, todo) {
-      state.todo_active = todo;
-    },
-    CLEAR_ACTIVE_TODO(state) {
-      state.todo_active = {};
-    },
-    ADD_TODO_ITEM(state, item) {
-      state.todo_active.items.push(item)
-    },
-    REMOVE_TODO_ITEM(state, index) {
-      state.todo_active.items.splice(index, 1);
-    },
-    CHANGE_TODO_ITEM(state, {new_item, getters}) {
-      const change_item = getters.specific_todo(state.todo_active, new_item.id);
-      change_item.checked = new_item.checked;
-      change_item.description = new_item.description;
+      state.todo_active = todo ;
     },
     SAVE_STATE(state) {
       localStorage.setItem('todo_list', state.todo_list);
@@ -71,27 +56,18 @@ export default new Vuex.Store({
       commit('SAVE_STATE');
     },
     removeTodo({commit, getters}, id) {
-      commit('REMOVE_TODO', getters.all_todos.indexOf(getters.specific_todo(getters.all_todos, id)));
+      commit('REMOVE_TODO', getters.all_todos.indexOf(getters.specific_todo(id)));
       commit('SAVE_STATE');
     },
-    changeTodo({ commit }, new_todo) {
-      commit('CHANGE_TODO', new_todo);
+    changeTodo({ commit, getters }, new_todo) {
+      commit('CHANGE_TODO', {index: getters.all_todos.indexOf(getters.specific_todo(new_todo.id)), new_todo});
       commit('SAVE_STATE');
     },
     setActive({commit, getters}, id) {
-      commit('SET_ACTIVE_TODO', getters.specific_todo(getters.all_todos, id));
+      commit('SET_ACTIVE_TODO', getters.specific_todo(id));
     },
     goBack({commit}) {
-      commit('CLEAR_ACTIVE_TODO');
-    },
-    addTodoItem({commit}, item) {
-      commit('ADD_TODO_ITEM', item);
-    },
-    removeTodoItem({commit, getters}, id) {
-      commit('REMOVE_TODO_ITEM', getters.active_todo.items.indexOf(getters.specific_todo(getters.todo_active, id)))
-    },
-    changeTodoItem({commit, getters}, new_item) {
-      commit('CHANGE_TODO_ITEM', {new_item, getters});
+      commit('SET_ACTIVE_TODO', {});
     }
   }
 })
