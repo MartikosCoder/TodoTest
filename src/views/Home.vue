@@ -1,21 +1,12 @@
 <template>
   <section class="home-page">
     <ul class="home-page__todo-list" v-if="all_todos.length > 0">
-      <li class="todo-list__item">
-        <h2 class="todo-list__item__title"></h2>
-        <ul class="todo-list__item__list">
-          <li class="list__item">
-            <!-- description checked -> (true = line-through | false = none) -->
-          </li>
-        </ul>
-        <button class="todo-list__item__edit-btn">Edit</button>
-        <button class="todo-list__item__remove-btn">Remove</button>
-      </li>
+      <TodoCard v-for="todo in all_todos" :key="todo.id" :todo="todo" />
     </ul>
     <div class="home-page__empty-msg" v-else>
       Nothing here. Add new TODO!
     </div>
-    <button class="home-page__add-btn">
+    <button class="home-page__add-btn" @click="createNewTodo">
       Add
     </button>
   </section>
@@ -26,10 +17,17 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Home',
   computed: {
-    ...mapGetters(['all_todos'])
+    ...mapGetters(['all_todos', 'current_id'])
+  },
+  components: {
+    TodoCard: () => import('../components/Home/TodoCard')
   },
   methods: {
-    ...mapActions(['addTodo'])
+    ...mapActions(['addTodo']),
+    createNewTodo() {
+      this.addTodo();
+      this.$router.push(`/edit/${this.current_id}`);
+    }
   }
 }
 </script>
