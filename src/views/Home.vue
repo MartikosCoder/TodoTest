@@ -50,3 +50,41 @@ export default {
   }
 };
 </script>
+
+<style>
+  .home-page {
+    background: #dcfeff;
+  }
+
+  .home-page__todo-list {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+
+    justify-content: center;
+    align-items: center;
+  }
+
+  .home-page__add-btn {
+    width: 100%;
+
+    position: sticky;
+    bottom: 0;
+
+    padding: 20px 5%;
+
+    background: #00ca00;
+    color: white;
+
+    border: none;
+
+    text-transform: uppercase;
+  }
+
+  .home-page__add-btn:hover {
+    background: #009500;
+    transition: .3s;
+  }
+</style>
