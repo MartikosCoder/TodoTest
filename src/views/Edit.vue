@@ -72,7 +72,7 @@ export default {
     active_todo: {
       handler(val) {
         if(!this.is_moving) {
-          const refined_val = {...val};
+          const refined_val = JSON.parse(JSON.stringify(val));
           this.$set(this, 'history', this.history.slice(0, this.revision));
           this.history.push(refined_val);
           this.$set(this, 'revision', this.revision + 1);
