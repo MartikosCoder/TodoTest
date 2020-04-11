@@ -13,7 +13,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Home",
   computed: {
-    ...mapGetters(["all_todos", "current_id"])
+    ...mapGetters(["all_todos", 'active_todo'])
   },
   components: {
     TodoCard: () => import("../components/Home/TodoCard")
@@ -22,7 +22,7 @@ export default {
     ...mapActions(["addTodo"]),
     createNewTodo() {
       this.addTodo();
-      this.$router.push(`/edit/${this.current_id}`);
+      this.$router.push(`/edit/${this.active_todo.id}`);
     }
   }
 };

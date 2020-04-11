@@ -7,7 +7,6 @@ export default new Vuex.Store({
   state: {
     todo_list: JSON.parse(localStorage.getItem("todo_list")) || [], // [{id, title, items}], where items = [{id, checked, description}]
     todo_active: {}, // Active todo `For edit page`
-    id: localStorage.getItem("last_id") || 1, // Current ID
 
     done_mutations: [], // [{mutation, payload}] for done operations [ undo ]
     undone_mutations: [], // [{mutation, payload}] for undone operations [ redo ]
@@ -24,15 +23,13 @@ export default new Vuex.Store({
       return id => {
         return { ...state.todo_list.find(item => item.id === id) };
       };
-    },
-    current_id(state) {
-      return state.id;
     }
   },
   mutations: {
     ADD_TODO(state) {
+      const current_id = Math.max(...state.todo_list.map(item => item.id));
       state.todo_list.push({
-        id: ++state.id,
+        id: current_id > 0 ? current_id + 1 : 1,
         title: "",
         items: []
       });
@@ -48,13 +45,12 @@ export default new Vuex.Store({
     },
     SAVE_STATE(state) {
       localStorage.setItem("todo_list", JSON.stringify(state.todo_list));
-      localStorage.setItem("last_id", state.id);
     }
   },
   actions: {
     addTodo({ commit, getters, dispatch }) {
       commit("ADD_TODO");
-      dispatch("setActive", getters.current_id);
+      dispatch("setActive", getters.all_todos[getters.all_todos.length - 1].id);
       commit("SAVE_STATE");
     },
     removeTodo({ commit, getters }, id) {
