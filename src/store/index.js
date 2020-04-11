@@ -7,10 +7,6 @@ export default new Vuex.Store({
   state: {
     todo_list: JSON.parse(localStorage.getItem("todo_list")) || [], // [{id, title, items}], where items = [{id, checked, description}]
     todo_active: {}, // Active todo `For edit page`
-
-    done_mutations: [], // [{mutation, payload}] for done operations [ undo ]
-    undone_mutations: [], // [{mutation, payload}] for undone operations [ redo ]
-    new_mutation: true // Indicator of new mutation | false - same timeline mutation / true - new timeline
   },
   getters: {
     all_todos(state) {
@@ -40,6 +36,9 @@ export default new Vuex.Store({
     CHANGE_TODO(state, { index, new_todo }) {
       state.todo_list.splice(index, 1, new_todo);
     },
+    UPDATE_ACTIVE(state, update_state) {
+      state.todo_active = update_state;
+    },
     SET_ACTIVE_TODO(state, todo) {
       state.todo_active = todo;
     },
@@ -66,6 +65,9 @@ export default new Vuex.Store({
         new_todo: getters.active_todo
       });
       commit("SAVE_STATE");
+    },
+    updateActive({commit}, current_state) {
+      commit("UPDATE_ACTIVE", current_state);
     },
     setActive({ commit, getters }, id) {
       commit("SET_ACTIVE_TODO", getters.specific_todo(id));
