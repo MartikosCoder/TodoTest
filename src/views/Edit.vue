@@ -2,23 +2,13 @@
   <section class="edit-page">
     <div class="edit-page__todo">
       <div class="edit-page__todo__title">
-        <label for="title">Title: </label>
-        <input
-          type="text"
-          name="title"
-          id="title"
-          v-model="active_todo.title"
-        />
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" v-model="active_todo.title" />
       </div>
       <section class="todo__items-block">
         <div class="edit-page__todo__new-item">
-          <label for="title">New Item: </label>
-          <input
-            type="text"
-            name="new_item"
-            id="new_item"
-            v-model="new_description"
-          />
+          <label for="title">New Item:</label>
+          <input type="text" name="new_item" id="new_item" v-model="new_description" />
           <button @click="addNewItem">Add</button>
         </div>
         <ul class="edit-page__todo__items-list">
@@ -33,7 +23,7 @@
     </div>
     <div class="edit-page__controls">
       <button>Back</button>
-      <button>Remove</button>
+      <button @click="prepareToRemove">Remove</button>
       <button @click="updateTodo">Save</button>
     </div>
   </section>
@@ -62,19 +52,27 @@ export default {
     this.setActive(+this.id);
   },
   methods: {
-    ...mapActions(["setActive", 'changeTodo']),
+    ...mapActions(["setActive", "changeTodo", "removeTodo"]),
     addNewItem() {
-      const current_id = Math.max(...this.active_todo.items.map(item => item.id));
-      this.active_todo.items.push({
-        id: current_id > 0 ? current_id + 1 : 1,
-        checked: false,
-        description: this.new_description
-      });
-      this.$set(this, "new_description", "");
+      if (this.new_description.length > 0) {
+        const current_id = Math.max(
+          ...this.active_todo.items.map(item => item.id)
+        );
+        this.active_todo.items.push({
+          id: current_id > 0 ? current_id + 1 : 1,
+          checked: false,
+          description: this.new_description
+        });
+        this.$set(this, "new_description", "");
+      }
     },
     updateTodo() {
       this.changeTodo();
-      this.$router.push('/');
+      this.$router.push("/");
+    },
+    prepareToRemove() {
+      this.removeTodo(this.active_todo.id);
+      this.$router.push("/");
     }
   }
 };
