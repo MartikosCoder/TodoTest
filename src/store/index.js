@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     todo_list: JSON.parse(localStorage.getItem("todo_list")) || [], // [{id, title, items}], where items = [{id, checked, description}]
-    todo_active: {}, // Active todo `For edit page`
+    todo_active: {},                                                // Active todo `For edit page`
   },
   getters: {
     all_todos(state) {
@@ -17,13 +17,13 @@ export default new Vuex.Store({
     },
     specific_todo(state) {
       return id => {
-        return { ...state.todo_list.find(item => item.id === id) };
+        return { ...state.todo_list.find(item => item.id === id) }; // Get specific todo by ID
       };
     }
   },
   mutations: {
     ADD_TODO(state) {
-      const current_id = Math.max(...state.todo_list.map(item => item.id));
+      const current_id = Math.max(...state.todo_list.map(item => item.id)); // Calculate available ID
       state.todo_list.push({
         id: current_id > 0 ? current_id + 1 : 1,
         title: "",
@@ -43,7 +43,7 @@ export default new Vuex.Store({
       state.todo_active = todo;
     },
     SAVE_STATE(state) {
-      localStorage.setItem("todo_list", JSON.stringify(state.todo_list));
+      localStorage.setItem("todo_list", JSON.stringify(state.todo_list)); // Saving list to localstorage for reload sequences
     }
   },
   actions: {

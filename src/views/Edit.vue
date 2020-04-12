@@ -79,13 +79,13 @@ export default {
   watch: {
     active_todo: {
       handler(val) {
-        if (!this.is_moving) {
-          const refined_val = JSON.parse(JSON.stringify(val));
-          this.$set(this, "history", this.history.slice(0, this.revision));
-          this.history.push(refined_val);
-          this.$set(this, "revision", this.revision + 1);
+        if (!this.is_moving) {  // If we clicked undo/redo this works
+          const refined_val = JSON.parse(JSON.stringify(val));  // Cloning state revision
+          this.$set(this, "history", this.history.slice(0, this.revision)); // Removing all states from future timeline ( for this new branch )
+          this.history.push(refined_val); // Pushing state
+          this.$set(this, "revision", this.revision + 1); // Incrementing revision position
         }
-        this.$set(this, "is_moving", false);
+        this.$set(this, "is_moving", false);  // In all cases setting is_moving to false
       },
       deep: true
     }
@@ -100,7 +100,7 @@ export default {
     ]),
     addNewItem() {
       if (this.new_description.length > 0) {
-        const current_id = Math.max(
+        const current_id = Math.max(  // Finding last available ID for new item
           ...this.active_todo.items.map(item => item.id)
         );
         this.active_todo.items = [
@@ -144,8 +144,8 @@ export default {
       this.$set(this.active_todo, "title", e.target.value);
     },
     updater() {
-      const updater = { ...this.history[this.revision - 1] };
-      this.updateActive(updater);
+      const updater = { ...this.history[this.revision - 1] }; // Getting selected revision from history
+      this.updateActive(updater); // Updating active_todo
     },
     undo() {
       if (this.revision > 1) {
