@@ -11,7 +11,7 @@
     </ul>
     <div class="todo-list__item__controls">
       <button class="todo-list__item__btn edit" @click="editTodo">Edit</button>
-      <button class="todo-list__item__btn remove" @click="confirmRemove(todo.id)">Remove</button>
+      <button class="todo-list__item__btn danger" @click="confirmRemove(todo.id)">Remove</button>
     </div>
   </li>
 </template>
@@ -27,94 +27,80 @@ export default {
       this.$router.push(`/edit/${this.todo.id}`);
     },
     confirmRemove() {
-        this.$emit('modalRequired', this.todo.id);
+      this.$emit("modalRequired", this.todo.id);
     }
   }
 };
 </script>
 
 <style>
+.list__item:nth-child(n + 7) {
+  display: none;
+}
+
+.todo-list__item {
+  background: #000074;
+  border-radius: 5px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  margin: 5%;
+  min-height: 250px;
+  min-width: 250px;
+  overflow: hidden;
+  position: relative;
+}
+
+.todo-list__item__btn {
+  padding: 5px;
+  width: 50%;
+}
+
+.todo-list__item__btn.edit {
+  background: #bababa;
+}
+
+.todo-list__item__btn.edit:hover {
+  background: #9f9f9f;
+}
+
+.todo-list__item__controls {
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  width: 100%;
+}
+
+.todo-list__item__list {
+  padding: 10%;
+}
+
+.todo-list__item__list .list__item {
+  list-style-type: disc;
+  margin-left: 10%;
+}
+
+.todo-list__item__list .list__item.solved {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: line-through;
+}
+
+.todo-list__item__title {
+  background: #fff;
+  color: #000;
+  padding: 10%;
+  text-transform: capitalize;
+}
+
+@media screen and (min-width: 1024px) {
   .todo-list__item {
-    min-width: 250px;
-    min-height: 250px;
-
-    margin: 5%;
-
-    background: #000074;
-    color: white;
-    border-radius: 5px;
-
-    display: flex;
-    flex-direction: column;
-
-    overflow: hidden;
-    position: relative;
-  }
-
-  .todo-list__item__title {
-    padding: 10%;
-    background: white;
-    color: black;
-
-    text-transform: capitalize;
-  }
-  
-  .todo-list__item__list {
-    padding: 10%;
-  }
-
-  .todo-list__item__list .list__item {
-    list-style-type: disc;
-    margin-left: 10%;
-  }
-  .todo-list__item__list .list__item.solved {
-    text-decoration: line-through;
-    color: rgba(255, 255, 255, 0.75);
-  }
-
-  .todo-list__item__controls {
-    display: flex;
-    flex-direction: row;
-
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+    min-height: 400px;
+    min-width: 400px;
   }
 
   .todo-list__item__btn {
-    width: 50%;
-    padding: 5px;
-
-    transition: background .3s;
+    padding: 15px;
   }
-
-  .todo-list__item__btn.edit {
-    background: rgb(186, 186, 186);
-  }
-  .todo-list__item__btn.edit:hover {
-    background: rgb(159, 159, 159);
-  }
-
-  .todo-list__item__btn.remove {
-    background: rgb(205, 0, 0);
-    color: white;
-  }
-  .todo-list__item__btn.remove:hover {
-    background: rgb(166, 0, 0);
-  }
-
-  .list__item:nth-child(n + 7) {
-    display: none;
-  }
-
-  @media screen and (min-width: 1024px) {
-    .todo-list__item {
-      min-width: 400px;
-      min-height: 400px;
-    }
-
-    .todo-list__item__btn {
-      padding: 15px;
-    }
-  }
+}
 </style>

@@ -6,8 +6,14 @@
       </div>
       <section class="todo__items-block">
         <div class="edit-page__todo__new-item">
-          <input type="text" name="new_item" id="new_item" placeholder="New task" v-model="new_description" />
-          <button @click="addNewItem">Add</button>
+          <input
+            type="text"
+            name="new_item"
+            id="new_item"
+            placeholder="New task"
+            v-model="new_description"
+          />
+          <button class="good" @click="addNewItem">Add</button>
         </div>
         <ul class="edit-page__todo__items-list">
           <ItemEditor
@@ -19,21 +25,25 @@
         </ul>
       </section>
     </div>
-    <div class="edit-page__controls">
+    <div class="edit-page__controls flex">
       <div class="controls__main">
-        <button class="controls__btn" @click="setConfirmation('discard')">Back</button>
-        <button class="controls__btn remove" @click="setConfirmation('remove')">Remove</button>
-        <button class="controls__btn save" @click="updateTodo">Save</button>
+        <button class="controls__btn back" @click="setConfirmation('discard')">Back</button>
+        <button class="controls__btn danger" @click="setConfirmation('remove')">Remove</button>
+        <button class="controls__btn good" @click="updateTodo">Save</button>
       </div>
       <div class="controls__additional">
-        <button class="controls__btn"  @click="undo">Undo</button>
-        <button class="controls__btn"  @click="redo">Redo</button>
+        <button class="controls__btn standard" @click="undo">Undo</button>
+        <button class="controls__btn standard" @click="redo">Redo</button>
       </div>
     </div>
-    <section class="edit-page__modal" v-show="modal_is_opened">
-      <span>Are you sure?</span>
-      <button @click="discardCommand">No</button>
-      <button @click="acceptCommand">Yes</button>
+    <section class="modal" :class="{flex: modal_is_opened}">
+      <div class="modal_container flex">
+        <span>Are you sure?</span>
+        <div class="modal_panel flex">
+          <button @click="discardCommand">No</button>
+          <button @click="acceptCommand">Yes</button>
+        </div>
+      </div>
     </section>
   </section>
 </template>
@@ -54,7 +64,7 @@ export default {
 
       history: [], // saving states
       revision: 0, // current position
-      is_moving: false, // undo/redo status - true = one of them was called, false = native update
+      is_moving: false // undo/redo status - true = one of them was called, false = native update
     };
   },
   components: {
@@ -69,13 +79,13 @@ export default {
   watch: {
     active_todo: {
       handler(val) {
-        if(!this.is_moving) {
+        if (!this.is_moving) {
           const refined_val = JSON.parse(JSON.stringify(val));
-          this.$set(this, 'history', this.history.slice(0, this.revision));
+          this.$set(this, "history", this.history.slice(0, this.revision));
           this.history.push(refined_val);
-          this.$set(this, 'revision', this.revision + 1);
+          this.$set(this, "revision", this.revision + 1);
         }
-        this.$set(this, 'is_moving', false);
+        this.$set(this, "is_moving", false);
       },
       deep: true
     }
@@ -131,23 +141,23 @@ export default {
       this.goToMain();
     },
     saveTitle(e) {
-      this.$set(this.active_todo, 'title', e.target.value);
+      this.$set(this.active_todo, "title", e.target.value);
     },
     updater() {
-      const updater = {...this.history[this.revision - 1]};
+      const updater = { ...this.history[this.revision - 1] };
       this.updateActive(updater);
     },
     undo() {
       if (this.revision > 1) {
-        this.$set(this, 'revision', this.revision - 1);
-        this.$set(this, 'is_moving', true);
+        this.$set(this, "revision", this.revision - 1);
+        this.$set(this, "is_moving", true);
         this.updater();
       }
     },
     redo() {
       if (this.revision < this.history.length) {
-        this.$set(this, 'revision', this.revision + 1);
-        this.$set(this, 'is_moving', true);
+        this.$set(this, "revision", this.revision + 1);
+        this.$set(this, "is_moving", true);
         this.updater();
       }
     }
@@ -155,90 +165,98 @@ export default {
 };
 </script>
 <style>
-  .edit-page {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+.back {
+  background: #ff9c5a;
+}
+
+.back:hover {
+  background: #ff8d42;
+}
+
+.controls__btn {
+  padding: 10px;
+  width: 50%;
+}
+
+.controls__main,
+.controls__additional {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.edit-page {
+  align-items: flex-start;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
+
+.edit-page__controls {
+  bottom: 0;
+  flex-direction: column;
+  position: fixed;
+  width: 100%;
+}
+
+.edit-page__todo {
+  background: #000074;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  margin: 5%;
+  min-height: 75%;
+  min-width: 75%;
+  overflow: hidden;
+  position: relative;
+}
+
+.edit-page__todo__items-list {
+  color: #fff;
+  padding: 5%;
+}
+
+.edit-page__todo__new-item {
+  display: flex;
+}
+
+.edit-page__todo__new-item .good {
+  width: 25%;
+}
+
+.edit-page__todo__new-item input {
+  background: #def4ff;
+  padding: 5%;
+  width: 75%;
+}
+
+.edit-page__todo__title {
+  background: #fff;
+  padding: 8% 10%;
+  text-transform: capitalize;
+}
+
+.edit-page__todo__title input {
+  border-bottom: 1px solid #000;
+  color: #000;
+  padding: 2%;
+  text-transform: capitalize;
+  width: 100%;
+}
+
+.standard {
+  background: #2469ff;
+}
+
+.standard:hover {
+  background: #1d53c9;
+}
+
+@media screen and (min-width: 600px) {
+  .edit-page__todo__title,
+  .edit-page__todo__new-item input,
+  .edit-page__todo__items-list {
+    padding: 20px;
   }
-  .edit-page__todo {
-    min-width: 250px;
-    min-height: 250px;
-
-    margin: 5%;
-
-    background: #000074;
-    color: white;
-    border-radius: 5px;
-
-    display: flex;
-    flex-direction: column;
-
-    overflow: hidden;
-    position: relative;
-  }
-
-  .edit-page__todo__title {
-    background: white;
-    padding: 8% 10%;
-    color: black;
-
-    text-transform: capitalize;
-  }
-
-  .edit-page__todo__title input {
-    width: 100%;
-    padding: 2%;
-    border-bottom: 1px solid black;
-    color: black;
-
-    text-transform: capitalize;
-  }
-
-  .todo__items-block {
-    padding: 5%;
-  }
-
-  .edit-page__todo__new-item {
-    display: flex;
-  }
-
-  .edit-page__controls {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .controls__main, .controls__additional {
-    width: 100%;
-    display: flex;
-
-    justify-content:center;
-
-    background: #2469ff;
-  }
-
-  .controls__btn {
-    width: 50%;
-    color: white;
-    padding: 10px;
-  }
-  .controls__btn.remove {
-    background: rgb(205, 0, 0);
-  }
-  .controls__btn.remove:hover {
-    background: rgb(166, 0, 0);
-  }
-
-  .controls__btn.save {
-    background: rgb(0, 202, 0);
-  }
-  .controls__btn.save:hover {
-    background: rgb(0, 149, 0);
-  }
+}
 </style>
